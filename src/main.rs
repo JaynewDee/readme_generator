@@ -8,29 +8,49 @@ use std::io::stdin;
 use std::io::LineWriter;
 
 //
+
 #[derive(Debug)]
 struct WriteError {
     message: String,
 }
 
-fn main() {
-    create_file("README.md").expect("Should have initialized file upon launch.");
-    println!("What is the name of your project?\n");
-    let project_name = get_input();
-    println!("Project Name: {}", to_formatted(&project_name, "name"));
+fn main() -> std::io::Result<()> {
+    let mut line_writer = LineWriter::new(
+        create_file("README.md").expect("Should have initialized file upon launch."),
+    );
 
-    println!("What license will the project have?\n Options: MIT");
-    let license_type = get_input();
-    println!("License Type: {}", license_type);
+    // Get project name
+    println!("Enter the name of your project:");
+    let project_name = to_formatted(&get_input(), "name");
+
+    line_writer.write(project_name.as_bytes())?;
+    line_writer.write(spacer())?;
+    line_writer.write(spacer())?;
+    line_writer.write(spacer())?;
+    //
+    //
+    let wants_subtitle = ask_for("subtitle");
+
+
+    // Get license options
+    //    println!("What license will the project have?\n Options: MIT");
+    //   let license_type = get_input();
+    //  println!("License Type: {}", license_type);
+    // Ok(())
+    Ok(())
 }
+
+//
 
 fn get_input() -> String {
-    let mut input = String::new();
+    let mut buffer = String::new();
     stdin()
-        .read_line(&mut input)
+        .read_line(&mut buffer)
         .expect("Stdin should have read user input into string buffer.");
-    input
+    buffer 
 }
+
+//
 
 fn create_file(name: &str) -> Result<File, WriteError> {
     let write_result = File::create(&name);
@@ -42,13 +62,36 @@ fn create_file(name: &str) -> Result<File, WriteError> {
     }
 }
 
+//
+
 fn to_formatted(s: &str, section: &str) -> String {
     match section {
         "name" => format!("# {s}"),
-        _ => format!("placeholder"),
+        _ => "to_formatted received an invalid argument ... ".to_string(),
     }
 }
 
-fn make_line_writer(file: File) -> LineWriter<File> {
-    LineWriter::new(file)
+//
+
+fn ask_for(opt: &str) -> bool {
+    let prompt = || println!("Include a {}?", opt);
+    
+    let answer = match opt {
+        "subtitle" => {
+            prompt();
+            get_input()
+        },
+        _ => String::new() 
+    };
+    match &answer[..] {
+        "Y" | "y" | "yes" | "YES" => true,
+        "N" | "n" | "no" | "NO" => false,
+        _ => false
+    }
+}
+
+//
+
+fn spacer<'a>() -> &'a [u8] {
+    "___\n".as_bytes()
 }
