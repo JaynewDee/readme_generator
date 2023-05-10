@@ -1,4 +1,2 @@
-# Willy wonka's chocolate factory
-___
-___
+# Super Cool Project
 ___
