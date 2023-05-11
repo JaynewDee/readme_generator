@@ -25,7 +25,8 @@ enum LicenseBadge {
 
 impl<'a> Badge<'a> {
     fn match_str(kind: &str) -> LicenseBadge {
-        match kind {
+        
+        match kind.trim() {
             "MIT" => LicenseBadge::MIT,
             "Apache" => LicenseBadge::Apache,
             "Mozilla" => LicenseBadge::Mozilla,
@@ -53,6 +54,7 @@ struct WriteError {
 
 fn main() {
     control_flow().expect("Encountered an IO error @ control_flow ... ");
+    exit(0);
 }
 
 fn control_flow() -> std::io::Result<()> {
@@ -82,7 +84,7 @@ fn control_flow() -> std::io::Result<()> {
     let license = Badge::generate(kind);
     line_writer.write(license.0.as_bytes())?;
 
-    exit(0);
+    Ok(())
 }
 
 fn get_input() -> String {
