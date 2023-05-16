@@ -1,4 +1,5 @@
 #![allow(dead_code, unused_variables)]
+#![allow(clippy::upper_case_acronyms)]
 //
 //
 //
@@ -25,7 +26,6 @@ enum LicenseBadge {
 
 impl<'a> Badge<'a> {
     fn match_str(kind: &str) -> LicenseBadge {
-        
         match kind.trim() {
             "MIT" => LicenseBadge::MIT,
             "Apache" => LicenseBadge::Apache,
@@ -46,6 +46,39 @@ impl<'a> Badge<'a> {
 }
 
 //
+fn toc() -> &'static str {
+r"
+## Description  
+<Describe the Application>
+
+## Table of Contents  
+
+*::: [Installation](#installation) :::*
+
+*::: [Usage](#usage) :::*
+
+*::: [Contributing](#contributing) :::*
+
+*::: [Tests](#test) :::*
+
+*::: [Questions](#questions) :::*
+
+## Installation  
+<Instructions go here>  
+
+## Usage  
+<How to use app/repo>
+
+## Contributing
+<Special mentions / how to contribute>
+
+## Tests  
+<How to run tests / performance explanation>
+
+## Questions  
+<How to get in contact>
+"
+}
 
 #[derive(Debug)]
 struct WriteError {
@@ -65,15 +98,15 @@ fn control_flow() -> std::io::Result<()> {
     // Get project name
     prompt_for("name");
     let project_name = to_formatted(&get_input(), "name");
-    line_writer.write(project_name.as_bytes())?;
+    line_writer.write_all(project_name.as_bytes())?;
 
     // Get subtitle
     match ask_for("subtitle") {
         true => {
             prompt_for("subtitle");
             let subtitle = to_formatted(&get_input(), "subtitle");
-            line_writer.write(subtitle.as_bytes())?;
-        },
+            line_writer.write_all(subtitle.as_bytes())?;
+        }
         false => println!("Subtitle will not be included."),
     };
 
@@ -82,7 +115,11 @@ fn control_flow() -> std::io::Result<()> {
     let license_type = get_input();
     let kind = Badge::match_str(&license_type);
     let license = Badge::generate(kind);
-    line_writer.write(license.0.as_bytes())?;
+    line_writer.write_all(license.0.as_bytes())?;
+
+    // Write table of contents
+    let byte_string = toc().as_bytes();
+    line_writer.write_all(byte_string)?;
 
     Ok(())
 }
@@ -98,7 +135,7 @@ fn get_input() -> String {
 }
 
 fn create_file(name: &str) -> Result<File, WriteError> {
-    match File::create(&name) {
+    match File::create(name) {
         Ok(file) => Ok(file),
         Err(_) => Err(WriteError {
             message: "Failed to initialize readme file ... ".to_string(),
@@ -108,8 +145,8 @@ fn create_file(name: &str) -> Result<File, WriteError> {
 
 fn to_formatted(s: &str, section: &str) -> String {
     match section {
-        "name" => format!("# {s}"),
-        "subtitle" => format!("### {s}"),
+        "name" => format!("# {s}\n"),
+        "subtitle" => format!("### {s}\n"),
         _ => "to_formatted received an invalid argument ... ".to_string(),
     }
 }
@@ -150,9 +187,9 @@ fn ask_for(opt: &str) -> bool {
     }
 }
 
-fn spacer<'a>(writer: &mut LineWriter<File>) {
+fn spacer(writer: &mut LineWriter<File>) {
     writer
-        .write("___\n".as_bytes())
+        .write_all("___\n".as_bytes())
         .expect("Writer should have written spacer characters");
 }
 
@@ -161,3 +198,28 @@ fn spacers(writer: &mut LineWriter<File>) {
     spacer(writer);
     spacer(writer);
 }
+
+/////////////////////
+/////////////////////
+/////////////////////
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_to_formatted() {
+        let input_str = "Super Cool Project";
+        let section = "name";
+        let result = to_formatted(input_str, section);
+        let correct = "# Super Cool Project".to_string();
+        assert!(result == correct);
+
+        let input_str = "Very cool and blazingly fast";
+        let section = "subtitle";
+        let result = to_formatted(input_str, section);
+        let correct = "### Very cool and blazingly fast".to_string();
+        assert!(result == correct);
+    }
+}
+
+/////////////////////////
