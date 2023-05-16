@@ -1,11 +1,6 @@
+# Willy Wonka's Locket Factory
 
-# Super Cool Project  
-
-### Very cool, and blazingly fast!
-      
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-
+[![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 ## Description  
 > Describe the Application
 
@@ -47,4 +42,3 @@
 
 ## Questions  
 > How to get in contact
-
