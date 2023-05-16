@@ -3,6 +3,10 @@ name = "readme_generator"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
+edition = "2021"
+name = "read-gen"
+path = "src/main.rs"
 
 [dependencies]
+ctrlc = "3.2.5"

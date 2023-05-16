@@ -1,11 +1,5 @@
-
-# Super Cool Project  
-
-### Very cool, and blazingly fast!
-      
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-
+pub fn toc() -> &'static str {
+    r"
 ## Description  
 > Describe the Application
 
@@ -47,4 +41,20 @@
 
 ## Questions  
 > How to get in contact
+"
+}
 
+pub fn default(badge: &str) -> String {
+format!(r"
+# Super Cool Project  
+
+### Very cool, and blazingly fast!
+      
+{}
+
+{}
+",
+        badge,
+        toc()
+    )
+}
