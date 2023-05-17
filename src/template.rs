@@ -4,6 +4,7 @@ use std::io::{LineWriter, Write};
 #[derive(Debug)]
 pub struct Badge<'a>(pub &'a str);
 
+#[derive(PartialEq)]
 pub enum LicenseBadge {
     MIT,
     Apache,
@@ -14,11 +15,11 @@ pub enum LicenseBadge {
 
 impl<'a> Badge<'a> {
     pub fn match_str(kind: &str) -> LicenseBadge {
-        match kind.trim() {
-            "MIT" => LicenseBadge::MIT,
-            "Apache" => LicenseBadge::Apache,
-            "Mozilla" => LicenseBadge::Mozilla,
-            "GNU" => LicenseBadge::GNU,
+        match kind.trim().to_lowercase().as_str() {
+            "mit" => LicenseBadge::MIT,
+            "apache" => LicenseBadge::Apache,
+            "mozilla" => LicenseBadge::Mozilla,
+            "gnu" => LicenseBadge::GNU,
             _ => LicenseBadge::Default,
         }
     }
@@ -32,16 +33,24 @@ impl<'a> Badge<'a> {
         }
     }
 }
+fn title(text: &str) -> String {
+    format!(r"# {text}")
+}
+
+fn subtitle(text: &str) -> String {
+    format!(r"### {text}")
+}
+fn section(name: &str, content: &str) -> String {
+    format!(
+        r"
+## {name}
+> {content}
+"
+    )
+}
 
 pub fn toc() -> &'static str {
     r"
-## Description  
-> Describe the Application
-
----
----
----
-
 ## Table of Contents  
 
 *::: [Installation](#installation) :::*
@@ -53,56 +62,53 @@ pub fn toc() -> &'static str {
 *::: [Tests](#tests) :::*
 
 *::: [Questions](#questions) :::*
-
-## Installation  
-> Instructions go here  
-
----
-
-## Usage  
-> How to use app/repo
-
----
-
-## Contributing
-> Special mentions / how to contribute
-
----
-
-## Tests  
-> How to run tests / performance explanation
-
----
-
-## Questions  
-> How to get in contact
 "
 }
 
 pub fn default(badge: &str) -> String {
     format!(
         r"
-# Super Cool Project  
-
-### Very cool, and blazingly fast!
-      
+{}
+{}     
+{}
+{}
+---
+---
+---
 {}
 
+{}
+{}
+{}
+{}
 {}
 ",
+        title("Super Cool Project"),
+        subtitle("Very cool, and blazingly fast"),
         badge,
-        toc()
+        section("Description", "Describe the project / application"),
+        toc(),
+        section("Installation", "Explain installation procedure"),
+        section("Usage", "Describe how the app is meant to be used"),
+        section("Contributing", "Explain how to contribute to the project"),
+        section("Tests", "Test runner instructions"),
+        section("Questions", "Contact the developers")
     )
 }
 
-fn spacer(writer: &mut LineWriter<File>) {
-    writer
-        .write_all("___\n".as_bytes())
-        .expect("Writer should have written spacer characters");
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-fn spacers(writer: &mut LineWriter<File>) {
-    spacer(writer);
-    spacer(writer);
-    spacer(writer);
+    #[test]
+    fn match_kind() {
+        let badge = Badge::match_str(" MIT");
+        assert!(badge == LicenseBadge::MIT);
+
+        let badge = Badge::match_str(" aPAcHE\n ");
+        assert!(badge == LicenseBadge::Apache);
+
+        let badge = Badge::match_str("gOOsecake ");
+        assert!(badge == LicenseBadge::Default)
+    }
 }

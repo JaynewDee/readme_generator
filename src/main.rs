@@ -11,7 +11,7 @@ use std::io::prelude::*;
 use std::io::LineWriter;
 use std::io::{stdin, stdout};
 use std::process::exit;
-use template::{toc, Badge, LicenseBadge};
+use template::{ Badge, LicenseBadge};
 
 //
 //
@@ -24,13 +24,8 @@ struct WriteError {
 }
 
 fn main() {
-    handle_ctrlc();
-
-    let args = get_cl_args();
-    println!("{:#?}", &args);
-    
-    
-    control_flow(args).expect("Encountered an IO error @ control_flow ... ");
+    handle_ctrlc(); 
+    control_flow(get_cl_args()).expect("Encountered an IO error @ control_flow ... ");
     exit(0);
 }
 
@@ -73,7 +68,7 @@ fn control_flow(cl_args: Vec<String>) -> std::io::Result<()> {
     line_writer.write_all(license.0.as_bytes())?;
 
     // Write table of contents
-    let byte_string = toc().as_bytes();
+    let byte_string = template::toc().as_bytes();
     line_writer.write_all(byte_string)?;
 
     Ok(())
@@ -176,7 +171,7 @@ mod tests {
         let result = to_formatted(input_str, section);
         let correct = "### Very cool and blazingly fast\n".to_string();
         assert!(result == correct);
-    }
+    } 
 }
 
 /////////////////////////

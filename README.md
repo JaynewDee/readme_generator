@@ -1,8 +1,11 @@
-# Willy Wonka's Locket Factory
 
-[![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
-## Description  
-> Describe the Application
+# Super Cool Project
+### Very cool, and blazingly fast     
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## Description
+> Describe the project / application
+---
 
 ---
 ---
@@ -20,25 +23,29 @@
 
 *::: [Questions](#questions) :::*
 
-## Installation  
-> Instructions go here  
 
+
+## Installation
+> Explain installation procedure
 ---
 
-## Usage  
-> How to use app/repo
 
+## Usage
+> Describe how the app is meant to be used
 ---
+
 
 ## Contributing
-> Special mentions / how to contribute
-
+> Explain how to contribute to the project
 ---
 
-## Tests  
-> How to run tests / performance explanation
 
+## Tests
+> Test runner instructions
 ---
 
-## Questions  
-> How to get in contact
+
+## Questions
+> Contact the developers
+---
+
