@@ -9,4 +9,5 @@ name = "read-gen"
 path = "src/main.rs"
 
 [dependencies]
+anyhow = "1.0.71"
 ctrlc = "3.2.5"

@@ -1,51 +1,58 @@
 
 # Super Cool Project
-### Very cool, and blazingly fast     
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-## Description
-> Describe the project / application
+     
+### *Very cool, and blazingly fast* 
 ---
 
+### __Description__
+
+Love you, then bite you where is my slave? I'm getting hungry caticus cuteicus yet stare at owner accusingly then wink or love you, then bite you.
+
 ---
 ---
 ---
 
-## Table of Contents  
+## Table of Contents
 
-*::: [Installation](#installation) :::*
-
-*::: [Usage](#usage) :::*
-
-*::: [Contributing](#contributing) :::*
-
-*::: [Tests](#tests) :::*
-
-*::: [Questions](#questions) :::*
-
-
-
-## Installation
-> Explain installation procedure
+- __*::: [Installation](#installation) :::*__
+        
+- __*::: [Usage](#usage) :::*__
+        
+- __*::: [Contributing](#contributing) :::*__
+        
+- __*::: [Tests](#tests) :::*__
+        
+- __*::: [Questions](#questions) :::*__
+        
 ---
-
-
-## Usage
-> Describe how the app is meant to be used
+---
 ---
 
 
-## Contributing
-> Explain how to contribute to the project
+
+## _Installation_
+> `CONTENT`
+
 ---
 
+## _Usage_
+> `CONTENT`
 
-## Tests
-> Test runner instructions
 ---
 
+## _Contributing_
+> `CONTENT`
 
-## Questions
-> Contact the developers
+---
+
+## _Tests_
+> `CONTENT`
+
+---
+
+## _Questions_
+> `CONTENT`
+
 ---
 

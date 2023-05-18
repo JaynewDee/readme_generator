@@ -1,7 +1,13 @@
-use std::fs::File;
-use std::io::{LineWriter, Write};
+/////
+/////
+/////
+pub struct PromptOptions<'a> {
+    pub title: &'a str,
+    pub subtitle: &'a str,
+    pub badge: Badge<'a>,
+    pub sections: Vec<String>,
+}
 
-#[derive(Debug)]
 pub struct Badge<'a>(pub &'a str);
 
 #[derive(PartialEq)]
@@ -14,6 +20,11 @@ pub enum LicenseBadge {
 }
 
 impl<'a> Badge<'a> {
+    const MIT: &str = "[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)";
+    const APACHE: &str ="[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)";
+    const MOZILLA: &str = "[![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)";
+    const GNU: &str = "[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)";
+
     pub fn match_str(kind: &str) -> LicenseBadge {
         match kind.trim().to_lowercase().as_str() {
             "mit" => LicenseBadge::MIT,
@@ -23,46 +34,83 @@ impl<'a> Badge<'a> {
             _ => LicenseBadge::Default,
         }
     }
+
     pub fn generate(kind: LicenseBadge) -> Self {
         match kind {
-            LicenseBadge::MIT => Badge("[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)"),
-            LicenseBadge::Apache => Badge("[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)"),
-            LicenseBadge::Mozilla => Badge("[![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)"),
-            LicenseBadge::GNU => Badge("[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)"),
-            LicenseBadge::Default => Badge("[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)")
+            LicenseBadge::MIT => Badge(Self::MIT),
+            LicenseBadge::Apache => Badge(Self::APACHE),
+            LicenseBadge::Mozilla => Badge(Self::MOZILLA),
+            LicenseBadge::GNU => Badge(Self::GNU),
+            LicenseBadge::Default => Badge(Self::MIT),
         }
     }
 }
+
 fn title(text: &str) -> String {
     format!(r"# {text}")
 }
 
 fn subtitle(text: &str) -> String {
-    format!(r"### {text}")
+    format!(r"### *{text}*")
 }
-fn section(name: &str, content: &str) -> String {
+
+fn description() -> String {
     format!(
         r"
-## {name}
-> {content}
+### __Description__
+
+Love you, then bite you where is my slave? I'm getting hungry caticus cuteicus yet stare at owner accusingly then wink or love you, then bite you.
+")
+}
+
+fn section(name: &str) -> String {
+    format!(
+        r"
+## _{name}_
+> `CONTENT`
+
+---
 "
     )
 }
 
-pub fn toc() -> &'static str {
-    r"
-## Table of Contents  
+fn sections(sect_vec: Vec<String>) -> String {
+    sect_vec.iter().map(|header| section(header)).collect()
+}
 
-*::: [Installation](#installation) :::*
+pub fn toc(sect_vec: Vec<String>) -> String {
+    format!(
+        r"
+## Table of Contents
+{}
+---
+---
+---
+",
+        sect_vec
+            .iter()
+            .map(|header| {
+                let link = header.replace(" ", "-");
+                format!(
+                    r"
+- __*::: [{}](#{}) :::*__
+        ",
+                    header,
+                    link.to_lowercase()
+                )
+            })
+            .collect::<String>()
+    )
+}
 
-*::: [Usage](#usage) :::*
-
-*::: [Contributing](#contributing) :::*
-
-*::: [Tests](#tests) :::*
-
-*::: [Questions](#questions) :::*
-"
+fn default_sections() -> Vec<String> {
+    vec![
+        "Installation".to_string(),
+        "Usage".to_string(),
+        "Contributing".to_string(),
+        "Tests".to_string(),
+        "Questions".to_string(),
+    ]
 }
 
 pub fn default(badge: &str) -> String {
@@ -70,7 +118,8 @@ pub fn default(badge: &str) -> String {
         r"
 {}
 {}     
-{}
+{} 
+---
 {}
 ---
 ---
@@ -78,21 +127,37 @@ pub fn default(badge: &str) -> String {
 {}
 
 {}
-{}
-{}
-{}
-{}
 ",
         title("Super Cool Project"),
+        badge.to_owned() + "\n",
         subtitle("Very cool, and blazingly fast"),
-        badge,
-        section("Description", "Describe the project / application"),
-        toc(),
-        section("Installation", "Explain installation procedure"),
-        section("Usage", "Describe how the app is meant to be used"),
-        section("Contributing", "Explain how to contribute to the project"),
-        section("Tests", "Test runner instructions"),
-        section("Questions", "Contact the developers")
+        description(), 
+        toc(default_sections()),
+        sections(default_sections())
+    )
+}
+
+pub fn prompted(options: PromptOptions) -> String {
+    format!(
+        r"
+{}
+{}
+{}  
+---
+{}
+---
+---
+---
+{}
+
+{}
+",
+        title(options.title),
+        options.badge.0.to_owned() + "\n",
+        subtitle(options.subtitle),
+        section("Description"),
+        toc(options.sections.clone()),
+        sections(options.sections)
     )
 }
 
