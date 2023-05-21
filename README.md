@@ -1,13 +1,29 @@
 
-# Super Cool Project
+# Groovy
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-     
-### *Very cool, and blazingly fast* 
+
+### *Tasty doobie*  
 ---
 
-### __Description__
+## _Description_
+> `CONTENT`
 
-Love you, then bite you where is my slave? I'm getting hungry caticus cuteicus yet stare at owner accusingly then wink or love you, then bite you.
+---
+
+![Image Title](https://image-link.com/image.png)
+![Image Title](https://image-link.com/image.png)
+![Image Title](https://image-link.com/image.png)
+![Image Title](https://image-link.com/image.png)
+![Image Title](https://image-link.com/image.png)
+![Image Title](https://image-link.com/image.png)
+![Image Title](https://image-link.com/image.png)
+![Image Title](https://image-link.com/image.png)
+![Image Title](https://image-link.com/image.png)
+![Image Title](https://image-link.com/image.png)
+![Image Title](https://image-link.com/image.png)
+![Image Title](https://image-link.com/image.png)
+![Image Title](https://image-link.com/image.png)
 
 ---
 ---
@@ -15,15 +31,11 @@ Love you, then bite you where is my slave? I'm getting hungry caticus cuteicus y
 
 ## Table of Contents
 
-- __*::: [Installation](#installation) :::*__
+- __*::: [Section1](#section1) :::*__
         
-- __*::: [Usage](#usage) :::*__
+- __*::: [Section2](#section2) :::*__
         
-- __*::: [Contributing](#contributing) :::*__
-        
-- __*::: [Tests](#tests) :::*__
-        
-- __*::: [Questions](#questions) :::*__
+- __*::: [Section3](#section3) :::*__
         
 ---
 ---
@@ -31,27 +43,17 @@ Love you, then bite you where is my slave? I'm getting hungry caticus cuteicus y
 
 
 
-## _Installation_
+## _Section1_
 > `CONTENT`
 
 ---
 
-## _Usage_
+## _Section2_
 > `CONTENT`
 
 ---
 
-## _Contributing_
-> `CONTENT`
-
----
-
-## _Tests_
-> `CONTENT`
-
----
-
-## _Questions_
+## _Section3_
 > `CONTENT`
 
 ---

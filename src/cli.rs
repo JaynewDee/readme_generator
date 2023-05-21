@@ -1,3 +1,6 @@
+//
+//
+//
 use crate::errors::{ControlError, WriteError};
 use crate::template::{default, prompted, Badge, LicenseBadge, PromptOptions};
 use std::fs::File;
@@ -8,6 +11,12 @@ use std::process::exit;
 //
 //
 //
+
+enum CountError {
+    Negative,
+    BeyondMax,
+    Parse
+}
 
 pub fn get_cl_args() -> Vec<String> {
     std::env::args().collect()
@@ -34,7 +43,7 @@ pub fn control_flow(cl_args: Vec<String>) -> Result<String, ControlError> {
 
     // if first arg is `prompt`,
     // initiate prompt flow
-    if cl_args[1].trim().to_lowercase() == String::from("prompt") {
+    if cl_args[1].trim().to_lowercase() == *"prompt" {
         from_prompt_flow(&mut line_writer)?
     }
 
@@ -43,17 +52,21 @@ pub fn control_flow(cl_args: Vec<String>) -> Result<String, ControlError> {
 
 fn from_prompt_flow(writer: &mut LineWriter<File>) -> std::io::Result<()> {
     prompt_for("title");
-    let user_input = &get_input().expect("Expected title input!");
-    let title = to_formatted(&user_input, "title");
+    let title = &get_input().expect("Expected title input!");
+    
 
-    let st = "subtitle";
-    prompt_for(st);
-    let user_input = &get_input().expect("Expected subtitle input!");
-    let subtitle = to_formatted(&user_input, st);
+    prompt_for("subtitle");
+    let subtitle = &get_input().expect("Expected subtitle input!");
+
+    prompt_for("images");
+    let user_input = &get_input().expect("Expected number of images.");
+    // If count cannot be parsed, default to 0
+    let image_count = user_input.trim().parse::<u8>().unwrap_or(0);
+
 
     prompt_for("license");
     let license_type = &get_input().expect("Expected license to be a Some value");
-    let kind = Badge::match_str(&license_type);
+    let kind = Badge::match_str(license_type);
     let license_badge = Badge::generate(kind);
 
     let mut sections: Vec<String> = vec![];
@@ -66,19 +79,21 @@ fn from_prompt_flow(writer: &mut LineWriter<File>) -> std::io::Result<()> {
 
     let options = PromptOptions {
         title: &title,
-        subtitle: &subtitle,
+        subtitle: subtitle.trim(),
         badge: license_badge,
         sections,
+        image_count
     };
 
     let template = prompted(options);
     writer.write_all(template.as_bytes())?;
+    println!("SUCCESS");
     exit(0)
 }
 
 fn from_default(writer: &mut LineWriter<File>) -> std::io::Result<()> {
     let badge = Badge::generate(LicenseBadge::Default).0;
-    let template = default(&badge);
+    let template = default(badge);
 
     writer.write_all(template.as_bytes())?;
 
@@ -94,19 +109,13 @@ fn get_input() -> Option<String> {
         .expect("Stdin should have read user input into string buffer.");
 
     if buffer.trim().to_lowercase() == "d" {
-        return None;
+        None
     } else {
         flush_out();
-        return Some(buffer);
+        Some(buffer)
     }
 }
-// TODO: Remove/handle later
-fn to_formatted(s: &str, header: &str) -> String {
-    match header {
-        "title" | "subtitle" => format!("{s}\n"),
-        _ => "to_formatted received an invalid argument ... ".to_string(),
-    }
-}
+
 
 fn flush_out() {
     stdout()

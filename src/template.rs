@@ -7,6 +7,7 @@ pub struct PromptOptions<'a> {
     pub subtitle: &'a str,
     pub badge: Badge<'a>,
     pub sections: Vec<String>,
+    pub image_count: u8,
 }
 
 pub struct Badge<'a>(pub &'a str);
@@ -27,7 +28,7 @@ impl<'a> Badge<'a> {
     const GNU: &str = "[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)";
 
     pub fn match_str(kind: &str) -> LicenseBadge {
-        match kind.trim().to_lowercase().as_str() {
+        match kind.to_lowercase().trim() {
             "mit" => LicenseBadge::MIT,
             "apache" => LicenseBadge::Apache,
             "mozilla" => LicenseBadge::Mozilla,
@@ -55,13 +56,12 @@ fn subtitle(text: &str) -> String {
     format!(r"### *{text}*")
 }
 
-fn description() -> String {
-    format!(
+fn description() -> &'static str { 
         r"
 ### __Description__
 
 Love you, then bite you where is my slave? I'm getting hungry caticus cuteicus yet stare at owner accusingly then wink or love you, then bite you.
-")
+"
 }
 
 fn section(name: &str) -> String {
@@ -114,6 +114,12 @@ fn default_sections() -> Vec<String> {
     ]
 }
 
+fn images(count: u8) -> String {
+    (0..count).fold(String::new(), |acc, _| {
+        acc + "![Image Title](https://image-link.com/image.png)\n"
+    })
+}
+
 pub fn default(badge: &str) -> String {
     format!(
         r"
@@ -121,6 +127,7 @@ pub fn default(badge: &str) -> String {
 {}     
 {} 
 ---
+{}
 {}
 ---
 ---
@@ -133,6 +140,7 @@ pub fn default(badge: &str) -> String {
         badge.to_owned() + "\n",
         subtitle("Very cool, and blazingly fast"),
         description(), 
+        images(3),
         toc(default_sections()),
         sections(default_sections())
     )
@@ -146,6 +154,7 @@ pub fn prompted(options: PromptOptions) -> String {
 {}  
 ---
 {}
+{}
 ---
 ---
 ---
@@ -157,6 +166,7 @@ pub fn prompted(options: PromptOptions) -> String {
         options.badge.0.to_owned() + "\n",
         subtitle(options.subtitle),
         section("Description"),
+        images(options.image_count),
         toc(options.sections.clone()),
         sections(options.sections)
     )
