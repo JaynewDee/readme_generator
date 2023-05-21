@@ -1,6 +1,7 @@
 /////
 /////
 /////
+
 pub struct PromptOptions<'a> {
     pub title: &'a str,
     pub subtitle: &'a str,
@@ -75,7 +76,7 @@ fn section(name: &str) -> String {
 }
 
 fn sections(sect_vec: Vec<String>) -> String {
-    sect_vec.iter().map(|header| section(header)).collect()
+    sect_vec.iter().map(move |header| section(header)).collect()
 }
 
 pub fn toc(sect_vec: Vec<String>) -> String {

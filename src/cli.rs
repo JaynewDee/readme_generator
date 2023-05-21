@@ -124,6 +124,10 @@ fn prompt_for(opt: &str) {
             println!("Enter your subtitle:");
             flush_out();
         }
+        "images" => {
+            println!("Number of image placeholders:");
+            flush_out()
+        }
         "license" => {
             println!("Choose a license for your project.\nOptions: MIT | Apache | Mozilla | GNU");
             flush_out();
@@ -139,12 +143,3 @@ fn prompt_for(opt: &str) {
     }
 }
 
-fn ask_for(opt: &str) -> bool {
-    println!("Include a {}?", opt);
-
-    match get_input().expect("Ask_for prompt failed ... ").trim() {
-        "Y" | "y" | "yes" | "YES" => true,
-        "N" | "n" | "no" | "NO" => false,
-        _ => false,
-    }
-}

@@ -1,5 +1,3 @@
-#![allow(dead_code, unused_variables)]
-#![allow(clippy::upper_case_acronyms)]
 //
 //
 //
